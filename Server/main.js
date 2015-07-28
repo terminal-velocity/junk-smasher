@@ -112,3 +112,10 @@ io.on('connection', function (socket) {
     }
   });
 });
+socket.on("position-update-user", function(data){
+  teams[users[data.user]].users.forEach(function(user){
+    if(user != data.user){
+      users[user].socket.emit("position-update-others", data);
+    }
+  });
+});
