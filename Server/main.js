@@ -99,24 +99,36 @@ io.on('connection', function (socket) {
     socket.emit("joinedteam");
     teams[teamname].users.forEach(function(user){
         socket.emit("newmember", user);
-        if(user != socket.username){
+        if(user !== socket.username){
           console.log("users");
           console.log(users);
           users[user].socket.emit("newmember", socket.username);
         }
     });
     if(teams[teamname].users.length == 5){
-      teams[teamname].users.forEach(function(user){
-        users[user].socket.emit("readytoselect");
-      })
+        teams[teamname].users.forEach(function(user){
+            users[user].socket.emit("readytoselect");
+        });
     }
+
+    console.log("Teams: " + JSON.stringify(teams));
+    for (let i in users) {
+        console.log("" + i + ": " + users[i]);
+    }
+    //debugger;
   });
   socket.on("position-update-user", function(data){
-    teams[users[socket.username].teamname].users.forEach(function(user){
-      if(user != socket.username){
-        data.user = socket.username;
-        users[user].socket.emit("position-update-others", data);
-      }
-    });
+    //console.log("" + socket.username + "sent position update " + JSON.stringify(data));
+
+    let teamname = users[socket.username].teamname;
+    let team = teams[teamname];
+
+    for (let username of team.users) {
+        if (username !== socket.username) {
+            let user = users[username];
+            data.user = socket.username;
+            user.socket.emit("position-update-others", data);
+        }
+    }
   });
 });
