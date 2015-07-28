@@ -1,11 +1,12 @@
 "use strict";
-const express = require("express"),
+var express = require("express"),
     logger = require("morgan"),
     cookieParser = require("cookie-parser"),
     bodyParser = require("body-parser"),
     methodOverride = require("method-override"),
     session = require("express-session"),
-    mongojs = require("mongojs");
+    mongojs = require("mongojs"),
+    compression = require('compression');
 
 const MongoStore = require("connect-mongo")(session);
 
@@ -36,6 +37,7 @@ app.get("/dynamic", (req, res) => {
 	res.send("Hello, world");
 });
 
+app.use(compression());
 app.use(express.static("Build/Client"));
 
 // require("./routes/test.js")(app);
