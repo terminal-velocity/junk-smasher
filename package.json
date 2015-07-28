@@ -21,6 +21,7 @@
     "gulp-uglify": "^1.2.0",
     "gulp-watch": "^4.2.4",
     "hbs": "^3.1.0",
+    "jquery": "^2.1.4",
     "method-override": "^2.3.3",
     "mongojs": "^1.0.2",
     "morgan": "^1.6.0",
