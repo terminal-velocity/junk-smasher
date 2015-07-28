@@ -5,9 +5,30 @@
 		<title> </title>
 
 		<link rel="stylesheet" href="/Styles/main.css" />
+		<style>
+		  canvas#main {
+				position: absolute;
+				width: 100vw;
+				height: 100vw;
+				left:0; top:0;
+			}
+			#links {
+				z-index: 10;
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				background-color: rgba(0,0,0, 0.5);
+				color: white;
+				font-size: small;
+			}
+			a{
+				color: inherit;
+			}
+		</style>
 	</head>
 
 	<body>
+	  <div id="links"><a href="/leaderboards.html">Leaderboards</a> | Speed: <span id="speedo"></span>mph | Score <span id="score"></span> | <button onclick="submit()">Save</button></div>
 		<canvas id="target"></canvas>
 		<script src="/Script/main.bundle.js"></script>
 	</body>
