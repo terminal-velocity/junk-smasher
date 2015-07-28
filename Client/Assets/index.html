@@ -2,7 +2,7 @@
 <html lang="en" ng-app="templateApp">
 	<head>
 		<meta charset="utf-8" />
-		<title> </title>
+		<title>~</title>
 
 		<link rel="stylesheet" href="/Styles/main.css" />
 		<style>
@@ -23,12 +23,13 @@
 			}
 			a{
 				color: inherit;
+				text-decoration: underline;
 			}
 		</style>
 	</head>
 
 	<body>
-	  <div id="links"><a href="/leaderboards.html">Leaderboards</a> | Speed: <span id="speedo"></span>mph | Score <span id="score"></span> | <button onclick="submit()">Save</button></div>
+	  <div id="links">You aren't in a team, <a herf="javascript:join()">join one</a>.</div>
 		<canvas id="target"></canvas>
 		<script src="/Script/main.bundle.js"></script>
 	</body>
