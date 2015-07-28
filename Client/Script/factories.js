@@ -1,6 +1,7 @@
 "use strict";
 
-const THREE = require("three");
+const THREE = require("three"),
+    m = require("./math");
 
 function skyboxFactory(base, extension, size) {
     let images = [
@@ -23,6 +24,24 @@ function skyboxFactory(base, extension, size) {
     return scene;
 }
 
+let matIA = new THREE.MeshBasicMaterial({
+    color: 0xff0000
+});
+let matA  = new THREE.MeshBasicMaterial({
+    color: 0x00ff00
+});
+let geom = new THREE.BoxGeometry(5000, 5000, 5000);
+function junkFactory(lat, lon, elev, active) {
+    let mesh = new THREE.Mesh(geom, active ? matA : matIA);
+
+    if (active) {
+        console.log("Active!");
+    }
+
+    m.sphericalToEuler(lat, lon, elev + 6000000, mesh.position);
+    return mesh;
+}
+
 function earthFactory(radius) {
     return new THREE.Mesh(
         new THREE.SphereGeometry(radius, 64, 64),
@@ -37,5 +56,6 @@ function earthFactory(radius) {
 
 module.exports = {
     skyboxFactory,
-    earthFactory
+    earthFactory,
+    junkFactory
 };
