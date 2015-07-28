@@ -28,7 +28,7 @@ app.camera.lookAt(new THREE.Vector3(0, 0, 0));
 app.scene.add(app.camera);
 
 (() => {
-    let controls = app.controls = new THREE.FlyControls( app.camera );
+    let controls = app.controls = new THREE.FlyControls( app.camera, app.renderer.domElement );
 	controls.movementSpeed = 100000;
 	controls.domElement = app.renderer.domElement;
 	controls.rollSpeed = Math.PI / 24;

@@ -5,32 +5,33 @@
 		<title>~</title>
 
 		<link rel="stylesheet" href="/Styles/main.css" />
-		<style>
-		  canvas#main {
-				position: absolute;
-				width: 100vw;
-				height: 100vw;
-				left:0; top:0;
-			}
-			#links {
-				z-index: 10;
-				position: absolute;
-				top: 0px;
-				left: 0px;
-				background-color: rgba(0,0,0, 0.5);
-				color: white;
-				font-size: small;
-			}
-			a{
-				color: inherit;
-				text-decoration: underline;
-			}
-		</style>
 	</head>
 
 	<body>
 	  <div id="links">You aren't in a team, <a herf="javascript:join()">join one</a>.</div>
 		<canvas id="target"></canvas>
+
+		<div class="gui-container">
+			<div id="login" class="startwindow">
+		    <input type="text" id="username" placeholder="Username">
+		    <input type="text" id="password" placeholder="Password (optional)">
+		    <div id="loginregisterbutton" class="button">Go</div>
+		  </div>
+		  <div id="teamselection" class="startwindow" style="display: none;">
+		    <input type="text" id="teamname" placeholder="Team Name">
+		    <div id="teamfull">Sorry, that team is full, so you aren't able to join.</div>
+		    <div id="teamjoin" class="button">Create Team</div>
+		  </div>
+		  <div id="teammembers" class="startwindow" style="display: none;">
+		    <span class="title">Current team members:</span>
+		    <ul>
+		    </ul>
+		    <div id="teamready">Your team is now full, and ready to battle!
+		      <div id="teamjoin" class="button">Create Team</div>
+		    </div>
+		  </div>
+		</div>
+
 		<script src="/Script/main.bundle.js"></script>
 	</body>
 </html>

@@ -6,6 +6,8 @@ let app = require("./vismod");
 const $ = require("jquery"),
     factories = require("./factories");
 
+require("./socket");
+
 $.get("/data/doc-min-1.geojson", (data) => {
     if (typeof data === typeof "") {
         data = JSON.parse(data);
