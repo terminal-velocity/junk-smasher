@@ -1,7 +1,8 @@
+var username;
+var socket;
 $(function() {
-  var username;
   $("#loginregisterbutton").html("Sign In");
-  var socket = io();
+  socket = io();
    $("#loginregisterbutton").click(function(){
 	   socket.emit("register", {username: $("#username").val()});
    });

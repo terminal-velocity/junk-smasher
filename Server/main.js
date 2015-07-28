@@ -95,7 +95,7 @@ io.on('connection', function (socket) {
     }
     teams[teamname].users.push(socket.username);
     console.log(teams);
-    socket.teamname = teamname;
+    users[socket.username].teamname = teamname;
     socket.emit("joinedteam");
     teams[teamname].users.forEach(function(user){
         socket.emit("newmember", user);
@@ -111,11 +111,12 @@ io.on('connection', function (socket) {
       })
     }
   });
-});
-socket.on("position-update-user", function(data){
-  teams[users[data.user]].users.forEach(function(user){
-    if(user != data.user){
-      users[user].socket.emit("position-update-others", data);
-    }
+  socket.on("position-update-user", function(data){
+    teams[users[socket.username].teamname].users.forEach(function(user){
+      if(user != socket.username){
+        data.user = socket.username;
+        users[user].socket.emit("position-update-others", data);
+      }
+    });
   });
 });
