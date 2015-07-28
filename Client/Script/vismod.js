@@ -26,6 +26,7 @@ app.renderer.gammaInput = app.renderer.gammaOutput = true;
 app.camera = new THREE.PerspectiveCamera(50, 1, 7.5, 10000000);
 app.camera.lookAt(new THREE.Vector3(0, 0, 0));
 app.scene.add(app.camera);
+app.players = {};
 
 (() => {
     let controls = app.controls = new THREE.FlyControls( app.camera, app.renderer.domElement );
@@ -45,8 +46,10 @@ app.scene.add(app.camera);
     app.camera.spherical = app.meta.location;
     app.camera.lookAt(new THREE.Vector3(0, 0, 0));
     app.camera.rotation.z = 0;
+
+    let speed = Math.random() * 0.15;
     app.camera.update = function (delta) {
-        this.spherical.lon += 0.03 * delta;
+        this.spherical.lon += speed * delta;
     };
 })();
 
@@ -56,15 +59,19 @@ app.scene.add(app.camera);
     app.camera.updateProjectionMatrix();
 })();
 
+let clock = new THREE.Clock();
 function render() {
+    if (!clock.running) { clock.start(); }
+
     window.requestAnimationFrame(render);
 
     let skybox = app.background.skybox;
     skybox.position.set(0, 0, 0);
     app.camera.localToWorld(skybox.position);
 
-    app.controls.update(1 / 60);
-    update(app.scene, 1 / 60);
+    let delta = clock.getDelta();
+    app.controls.update(delta);
+    update(app.scene, delta);
 
     app.renderer.clear(true, true, true);
     app.renderer.autoClearColor = false;
