@@ -32,6 +32,12 @@ $("#teamjoin").click(function(){
     socket.emit("jointeam", $("#teamname").val());
 });
 
+$("#gamestart").click(function () {
+    console.log("requesting that the game starts...");
+
+    socket.emit("requestgamestart");
+});
+
 /////////////////////////////////
 //////// socket.io //////////////
 /////////////////////////////////
@@ -110,4 +116,8 @@ socket.on("position-update-others", function (data) {
 
 socket.on("readytoselect", function(){
     $("#teammembers #teamready").fadeIn();
+});
+
+socket.on("startgame", function () {
+    $(".gui-container").hide(200);
 });
