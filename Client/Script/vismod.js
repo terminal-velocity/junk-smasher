@@ -1,7 +1,9 @@
 "use strict";
 
 const THREE = require("three"),
-    factories = require("./factories");
+    factories = require("./factories"),
+    m = require("./math");
+
 require("./FlyControls");
 
 let app = window.app = {};
@@ -11,8 +13,10 @@ app.renderer = new THREE.WebGLRenderer({
     canvas: document.getElementById("target"),
     logarithmicDepthBuffer: true
 });
+app.renderer.gammaInput = app.renderer.gammaOutput = true;
 app.camera = new THREE.PerspectiveCamera(50, 1, 7.5, 10000000);
-app.camera.position.set(0, 0, 8500000);
+app.camera.lookAt(new THREE.Vector3(0, 0, 0));
+m.sphericalToEuler(50, 0, 7500000, app.camera.position);
 app.scene.add(app.camera);
 
 (() => {
@@ -29,9 +33,18 @@ app.scene.add(app.camera);
     let sun = new THREE.DirectionalLight(0xffeeee, 0.8);
     sun.position.set(0, 0, 1);
     app.scene.add(sun);
+
+    app.camera.spherical = {
+        lat: 30, lon: 0, elev: 9500000
+    };
+    app.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    app.camera.rotation.z = 0;
+    app.camera.update = function (delta) {
+        this.spherical.lon += 5 * delta;
+    };
 })();
 
-(document.onresize = () => {
+(window.onresize = () => {
     app.renderer.setSize(window.innerWidth, window.innerHeight);
     app.camera.aspect = window.innerWidth / window.innerHeight;
     app.camera.updateProjectionMatrix();
@@ -57,6 +70,11 @@ render();
 function update(object, delta) {
     if (typeof object.update === "function") {
         object.update(delta);
+    }
+
+    if (object.spherical) {
+        m.sphericalToEuler(object.spherical.lat, object.spherical.lon,
+            object.spherical.elev, object.position);
     }
 
     if (object.children) {

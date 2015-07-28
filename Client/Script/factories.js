@@ -30,7 +30,7 @@ function earthFactory(radius) {
             map: THREE.ImageUtils.loadTexture("/earth/diffuse.jpg"),
             normalMap: THREE.ImageUtils.loadTexture("/earth/norm.jpg"),
             specularMap: THREE.ImageUtils.loadTexture("/earth/spec.jpg"),
-            specular: new THREE.Color("grey")
+            specular: new THREE.Color(0.33, 0.33, 0.33)
         })
     );
 }
