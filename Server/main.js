@@ -117,6 +117,19 @@ io.on('connection', function (socket) {
     }
     //debugger;
   });
+
+  socket.on("requestgamestart", function () {
+      console.log("Recieved a request to start the game");
+
+      let teamname = users[socket.username].teamname;
+      let team = teams[teamname];
+
+      for (let username of team.users) {
+          users[username].socket.emit("startgame");
+          console.log("Telling user to start: " + username);
+      }
+  });
+
   socket.on("position-update-user", function(data){
     //console.log("" + socket.username + "sent position update " + JSON.stringify(data));
 

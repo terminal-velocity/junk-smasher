@@ -8,11 +8,15 @@ require("./FlyControls");
 
 let app = window.app = module.exports = {};
 
+function lerp(a, b, alpha) {
+    return a + ((b - a) * alpha);
+}
+
 app.meta = {
     location: {
-        lat: 30,
+        lat: lerp(28, 31, Math.random()),
         lon: 0,
-        elev: 7500000
+        elev: lerp(7499700, 7500000, Math.random())
     }
 };
 
