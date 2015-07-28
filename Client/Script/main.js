@@ -16,6 +16,7 @@ $.get("/data/doc-min-1.geojson", (data) => {
     for (let i = 0; i < data.features.length; i++) {
         let point = data.features[i].geometry.coordinates;
         point.active = data.features[i].properties.styleUrl === "#ActiveLEO";
+        point.jid = data.features[i].id;
 
         if (
             (point[0] >= app.meta.location.lat - 30)

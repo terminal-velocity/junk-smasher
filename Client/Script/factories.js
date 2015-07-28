@@ -54,8 +54,24 @@ function earthFactory(radius) {
     );
 }
 
+function playerFactory(position, name, app) {
+    let mat = new THREE.MeshNormalMaterial();
+    let geo = new THREE.BoxGeometry(50000, 50000, 50000);
+    let mesh = new THREE.Mesh(geo, mat);
+
+    app.players[name] = mesh;
+
+    mesh.spherical = {
+        lat: position.lat || position[0] || 0,
+        lon: position.lon || position[1] || 0,
+        elev: position.elev || position[2] || 7000000
+    };
+    return mesh;
+}
+
 module.exports = {
     skyboxFactory,
     earthFactory,
-    junkFactory
+    junkFactory,
+    playerFactory
 };
