@@ -24,6 +24,18 @@ router.get("/api/user-scores/new", function(req, res){
   });
 });
 
+router.get("/api/user-scores/best.json", function (req, res) {
+  var saves = req.db.collection('user-scores');
+  saves.find().sort({score: -1}, function(err, docs){
+    docs.slice(0,20);
+    if(err){
+      res.json({error: true})
+    }else{
+      res.json({error: false, list: docs});
+    }
+  });
+});
+
 router.get("/api/team-scores/new", function(req, res){
   var scores = req.db.collection('team-scores');
   var score = {};
@@ -38,6 +50,18 @@ router.get("/api/team-scores/new", function(req, res){
       res.json({error: true, message: "ERROR Error adding data."+err});
     }else{
       res.json({error: false, id: doc._id , message: "SUCCESS "+doc._id});
+    }
+  });
+});
+
+router.get("/api/team-scores/best.json", function (req, res) {
+  var saves = req.db.collection('team-scores');
+  saves.find().sort({score: -1}, function(err, docs){
+    docs.slice(0,20);
+    if(err){
+      res.json({error: true})
+    }else{
+      res.json({error: false, list: docs});
     }
   });
 });
