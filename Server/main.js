@@ -13,7 +13,8 @@ const MongoStore = require("connect-mongo")(session);
 let app = express();
 
 let config = {
-    db: process.env.DBURL
+    db: process.env.DBURL,
+    numplayers: 2
 };
 
 // Integrate Middleware
@@ -75,7 +76,7 @@ io.on('connection', function (socket) {
     console.log(teams);
     console.log(teamname in teams);
     if(teamname in teams){
-      if(teams[teamname].users.length == 5){
+      if(teams[teamname].users.length == config.numplayers){
         socket.emit("teamcheckresponse", "full");
       }
       else{
@@ -106,7 +107,7 @@ io.on('connection', function (socket) {
           users[user].socket.emit("newmember", socket.username);
         }
     });
-    if(teams[teamname].users.length == 5){
+    if(teams[teamname].users.length == config.numplayers){
         teams[teamname].users.forEach(function(user){
             users[user].socket.emit("readytoselect");
         });
@@ -152,7 +153,7 @@ io.on('connection', function (socket) {
     console.log(teams);
     Object.keys(teams).forEach(function(teamname){
       var team = teams[teamname];
-      if(team.users.length == 5){
+      if(team.users.length == config.numplayers){
         fullteams2.push(team);
       }
     });
@@ -167,7 +168,7 @@ io.on('connection', function (socket) {
     Object.keys(teams).forEach(function(teamname){
       var team = teams[teamname];
       var teamstate = "";
-      if(team.users.length == 5){
+      if(team.users.length == config.numplayers){
         if(team.game){
           teamstate = "In Game";
         }
