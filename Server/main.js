@@ -97,7 +97,7 @@ io.on('connection', function (socket) {
       fullteams().forEach(function(team){
         team.users.forEach(function(username){
           users[username].socket.emit("teamslist newteam", {
-            team: teamname,
+            name: teamname,
             state: "Not Full"
           });
         });
