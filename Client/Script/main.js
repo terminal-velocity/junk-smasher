@@ -30,11 +30,16 @@ $.get("/data/doc-min-1.geojson", (data) => {
         }
     }
 
+    app.junkMeshes = [];
+
     console.log("" + points.length + " are nearby");
     for (let i = 0; i < points.length; i++) {
         let point = points[i];
 
-        app.scene.add(factories.junkFactory(point[0], point[1], point[2],
-            point.active));
+        let mesh = factories.junkFactory(point[0], point[1], point[2],
+            point.active);
+        app.junkMeshes.push(mesh);
+
+        app.scene.add(mesh);
     }
 });
