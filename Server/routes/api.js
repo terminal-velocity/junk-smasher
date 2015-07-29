@@ -5,6 +5,7 @@ router.get("/api/test", function(req, res){
 	res.send("Hello, test");
 });
 
+/*
 router.get("/api/new", function(req, res){
   var saves = req.db.collection('saves');
   var save = {};
@@ -21,6 +22,6 @@ router.get("/api/new", function(req, res){
       res.json({error: false, id: doc._id , message: "SUCCESS "+doc._id});
     }
   });
-});
+});*/
 
 module.exports = router;
