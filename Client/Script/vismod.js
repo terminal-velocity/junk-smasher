@@ -43,18 +43,17 @@ app.players = {};
     let earth = factories.earthFactory(6300000);
     app.scene.add(earth);
 
+    m.sphericalToEuler(app.meta.location.lat,
+        app.meta.location.lon,
+        app.meta.location.elev,
+        app.camera.position);
+
     let sun = new THREE.DirectionalLight(0xffeeee, 0.8);
-    sun.position.set(0, 0, 1);
+    sun.position.copy(app.camera.position);
     app.scene.add(sun);
 
-    app.camera.spherical = app.meta.location;
     app.camera.lookAt(new THREE.Vector3(0, 0, 0));
     app.camera.rotation.z = 0;
-
-    let speed = Math.random() * 0.15;
-    app.camera.update = function (delta) {
-        this.spherical.lon += speed * delta;
-    };
 })();
 
 (window.onresize = () => {
@@ -88,9 +87,10 @@ function update(object, delta) {
         object.update(delta);
     }
 
-    if (object.spherical) {
-        m.sphericalToEuler(object.spherical.lat, object.spherical.lon,
-            object.spherical.elev, object.position);
+    if (object.velocity) {
+        object.position.x += object.velocity.x * delta;
+        object.position.y += object.velocity.y * delta;
+        object.position.z += object.velocity.z * delta;
     }
 
     if (object.children) {
