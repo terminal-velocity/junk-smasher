@@ -1,4 +1,6 @@
 var express = require('express');
+var fs = require("fs");
+var path = require('path');
 var router = express.Router();
 
 router.get("/api/test", function(req, res){
@@ -65,5 +67,26 @@ router.get("/api/team-scores/best.json", function (req, res) {
     }
   });
 });
+
+// function via http://stackoverflow.com/a/4992429
+function getObjects(obj, key, val) {
+    var objects = [];
+    for (var i in obj) {
+        if (!obj.hasOwnProperty(i)) continue;
+        if (typeof obj[i] == 'object') {
+            objects = objects.concat(getObjects(obj[i], key, val));
+        } else if (i == key && obj[key] == val) {
+            objects.push(obj);
+        }
+    }
+    return objects;
+}
+
+// e.g. /api/object/36745/json
+router.get("/api/object/:id/json", function (req, res) {
+  var data = JSON.parse(fs.readFileSync(path.join(__dirname,'../../Client/data/doc.geojson'), "utf8"));
+  res.json(getObjects(data.features, "id",  req.params.id)[0]);
+});
+
 
 module.exports = router;
