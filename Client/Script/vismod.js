@@ -36,7 +36,7 @@ app.players = {};
     let controls = app.controls = new THREE.FlyControls( app.camera, app.renderer.domElement );
 	controls.movementSpeed = 100000;
 	controls.domElement = app.renderer.domElement;
-	controls.rollSpeed = Math.PI / 24;
+	controls.rollSpeed = Math.PI / 6;
 	controls.autoForward = false;
 	controls.dragToLook = false;
 
