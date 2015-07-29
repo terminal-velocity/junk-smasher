@@ -94,6 +94,14 @@ io.on('connection', function (socket) {
         users: [],
         game: null
       };
+      fullteams().forEach(function(team){
+        team.users.forEach(function(username){
+          users[username].socket.emit("teamslist newteam", {
+            team: teamname,
+            state: "Not Full"
+          });
+        });
+      });
     }
     teams[teamname].users.push(socket.username);
     console.log(teams);
@@ -111,6 +119,24 @@ io.on('connection', function (socket) {
         teams[teamname].users.forEach(function(user){
             users[user].socket.emit("readytoselect");
         });
+        fullteams().forEach(function(team){
+          team.users.forEach(function(username){
+            users[username].socket.emit("teamslist update", {
+              team: teamname,
+              state: "Ready"
+            });
+          });
+        });
+    }
+    else {
+      fullteams().forEach(function(team){
+        team.users.forEach(function(username){
+          users[username].socket.emit("teamslist update", {
+            team: teamname,
+            state: "Not Full"
+          });
+        });
+      });
     }
 
     console.log("Teams: " + JSON.stringify(teams));
