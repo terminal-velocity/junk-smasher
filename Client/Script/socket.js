@@ -139,14 +139,14 @@ socket.on("teamslist fulldata", function(teamsdata){
   $("#teammembers").fadeOut(function(){
     $("#teamslist").fadeIn();
   });
-});
 
-socket.on("teamslist update", function(data){
-  $("#teamlist-" + data.name + ">.teamstate").html(data.state);
-});
+  socket.on("teamslist update", function(data){
+    $("#teamlist-" + data.name + ">.teamstate").html(data.state);
+  });
 
-socket.on("teamslist newteam", function(data){
-  $("#teamslist>ul").html($("#teamslist>ul").html() + "<li id='teamlist-" + data.name + "'><span class='teamname'>" + data.name + "</span><span class='teamstate'>" + data.state + "</span></li>");
+  socket.on("teamslist newteam", function(data){
+    $("#teamslist>ul").html($("#teamslist>ul").html() + "<li id='teamlist-" + data.name + "'><span class='teamname'>" + data.name + "</span><span class='teamstate'>" + data.state + "</span></li>");
+  });
 });
 
 socket.on("startgame", function () {
