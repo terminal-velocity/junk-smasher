@@ -4,6 +4,7 @@ let $ = require("jquery");
 let io = require("socket.io-client");
 let app = require("./vismod");
 let factories = require("./factories");
+let THREE = require("three");
 
 $("#loginregisterbutton").html("Sign In");
 
@@ -13,6 +14,25 @@ module.exports = socket;
 ////////////////////////////
 //// jquery  ///////////////
 ////////////////////////////
+
+$("canvas#target").click(() => {
+    console.log("click");
+
+    let vec = new THREE.Vector3(0, 0, 0);
+    for (let mesh of app.junkMeshes) {
+        vec.set(
+            app.camera.position.x - mesh.position.x,
+            app.camera.position.y - mesh.position.y,
+            app.camera.position.z - mesh.position.z
+        );
+
+        if (vec.lengthSq() <= (15000 * 15000)) {
+            app.scene.remove(mesh);
+
+            console.log("removed object");
+        }
+    }
+});
 
 $("#loginregisterbutton").click(function(){
     socket.emit("register", {
@@ -32,11 +52,11 @@ $("#teamjoin").click(function(){
     socket.emit("jointeam", $("#teamname").val());
 });
 
-$("#gamestart").click(function () {
-    console.log("requesting that the game starts...");
-
+window.startGame = function () {
     socket.emit("requestgamestart");
-});
+};
+
+$("#gamestart").click(window.startGame);
 
 /////////////////////////////////
 //////// socket.io //////////////
@@ -82,23 +102,13 @@ socket.on("joinedteam", function(){
     $("#teamselection").fadeOut(function(){
         $("#teammembers").fadeIn();
     });
-
-    window.setInterval(() => {
-        socket.emit("position-update-user", {
-            position: [
-                app.camera.position.x,
-                app.camera.position.y,
-                app.camera.position.z
-            ]
-        });
-    }, 100);
 });
 
 socket.on("newmember", function(newusername){
     $("#teammembers>ul").html($("#teammembers>ul").html() + "<li>" + newusername + "</li>");
     if (newusername === app.username) { return; }
 
-    console.log("Received new user data for " + newusername);
+    //console.log("Received new user data for " + newusername);
     app.scene.add(factories.playerFactory([0, 0, 7000000], newusername, app));
 });
 
@@ -120,4 +130,14 @@ socket.on("readytoselect", function(){
 
 socket.on("startgame", function () {
     $(".gui-container").hide(200);
+
+    window.setInterval(() => {
+        socket.emit("position-update-user", {
+            position: [
+                app.camera.position.x,
+                app.camera.position.y,
+                app.camera.position.z
+            ]
+        });
+    }, 100);
 });
