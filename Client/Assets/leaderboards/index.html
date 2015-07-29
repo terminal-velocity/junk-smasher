@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leaderboards</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <script src="/leaderboards/jx.js"></script>
+    <script src="/leaderboards/leaderboards.js"></script>
+    <style>
+    html {
+    overflow-y: scroll;
+    }
+    body {
+      background: #f5f5f5;
+      font-family: Helvetica, sans-serif;
+      padding: 0 5%;
+    }
+    #main {
+      background: white;
+      max-width: 600px;
+      text-align: left;
+      padding: 1.5em;
+      margin: 3em auto 1em;
+      box-shadow: 1.5px 1.5px 6px rgba(0,0,0,0.15);
+    }
+    #footer {
+      font-size: small;
+      color: black;
+      text-align: right;
+    }
+    .nav {
+      text-align: right;
+    }
+    .disabled-link{
+      color: #999;
+    }
+    .pagination{
+      font-size: small;
+    }
+    h1{
+      display: inline;
+      text-align: left;
+    }
+    h2{
+      display:inline;
+      color:gray;
+    }
+    a {
+      color: #0096cc; text-decoration: none;
+    }
+    a:hover {
+      color: #007199;
+    }
+    hr{
+      color: #f5f5f5;
+      background-color: #f5f5f5;
+      height: 5px;
+      border: 0px;
+    }
+    pre{
+      overflow-x: scroll;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <div class="nav">
+        <a href="/">&larr; Back to game</a>
+      </div>
+      <br />
+      <h1>Leaderboards</h1>
+      <a href="javascript:getLeaderboards('/api/user-scores/best.json')">User Leaderboards</a> &bull; <a href="javascript:getLeaderboards('/api/team-scores/best.json')">Team Leaderboards</a>
+      <hr>
+      <div id="data">
+        <i>Select the leaderboard you would like to load.</i>
+      </div>
+      <hr />
+      <div id="footer">
+        Developed by Isaac Reid-Guest, Matt Randell and Tim Stallard.
+      </div>
+    </div>
+  </body>
+</html>
