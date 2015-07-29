@@ -40,7 +40,7 @@ app.get("/dynamic", (req, res) => {
 app.use(compression());
 app.use(express.static("Build/Client"));
 
-app.use("/api/", require("./routes/api.js"));
+app.use("/", require("./routes/api.js"));
 
 var server = app.listen(process.env.PORT || 3000, () => {
 	var {address: host, port} = server.address();
