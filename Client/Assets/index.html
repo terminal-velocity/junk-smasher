@@ -5,10 +5,28 @@
 		<title>~</title>
 
 		<link rel="stylesheet" href="/Styles/main.css" />
+    <script>
+    function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'block';
+    }
+    </script>
 	</head>
 
 	<body>
-    <div id="links"><a href="/leaderboards/" target="_blank">Leaderboards</a> &bull; <span id="teammsg">You aren't in a team, <a herf="javascript:join()">join one</a>.</span></div>
+    <div id="links"><a href="javascript:toggle_visibility('leaderboard')">Toggle Leaderboards</a> &bull; <span id="teammsg">You aren't in a team, <a href="javascript:join()">join one</a>.</span>
+    <div id="leaderboard">
+      <hr>
+      <a href="javascript:getLeaderboards('/api/user-scores/best.json')">User Leaderboards</a> &bull; <a href="javascript:getLeaderboards('/api/team-scores/best.json')">Team Leaderboards</a> <a href="/leaderboards/" target="_blank">&rarr;</a>
+      <hr>
+      <div id="data">
+        <i>Select the leaderboard you would like to load.</i>
+      </div>
+    </div>
+    </div>
 		<canvas id="target"></canvas>
 
 		<div class="gui-container">
@@ -32,6 +50,8 @@
 		  </div>
 		</div>
 
+    <script src="/leaderboards/jx.js"></script>
+    <script src="/leaderboards/leaderboards.js"></script>
 		<script src="/Script/main.bundle.js"></script>
 	</body>
 </html>
