@@ -134,7 +134,10 @@ $("#showteamslist").click(function(){
 
 socket.on("teamslist fulldata", function(teamsdata){
   teamsdata.forEach(function(teamdata){
-    $("#teamslist>ul").html($("#teamslist>ul").html() + "<li id='teamlist-" + teamdata.name + "'><span class='teamname'>" + teamdata.name + "</span><span class='teamstate'>" + teamdata.state + "</span></li>");
+    $("#teamslist>ul").html($("#teamslist>ul").html() + "<li id='teamlist-" + teamdata.name + "' data-teamname='" + teamdata.name + "''><span class='teamname'>" + teamdata.name + "</span><span class='teamstate'>" + teamdata.state + "</span></li>");
+    $("#teamlist-" + data.name + ">.teamstate").click(function(){
+      socket.emit("teamslist click", $(this).data("teamname"))
+    });
   });
   $("#teammembers").fadeOut(function(){
     $("#teamslist").fadeIn();
