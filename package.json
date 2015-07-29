@@ -37,6 +37,7 @@
   },
   "scripts": {
     "postinstall": "gulp",
-    "start": "node server.js"
+    "start": "node server.js",
+    "nerdstart": "npm install && nf run npm start"
   }
 }
