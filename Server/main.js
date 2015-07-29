@@ -90,7 +90,8 @@ io.on('connection', function (socket) {
     if(!(teamname in teams)){
       teams[teamname] = {
         name: teamname,
-        users: []
+        users: [],
+        game: null
       };
     }
     teams[teamname].users.push(socket.username);
@@ -143,5 +144,46 @@ io.on('connection', function (socket) {
             user.socket.emit("position-update-others", data);
         }
     }
+  });
+
+  function fullteams(){
+    var fullteams2 = [];
+    console.log("fullteams");
+    console.log(teams);
+    Object.keys(teams).forEach(function(teamname){
+      var team = teams[teamname];
+      if(team.users.length == 5){
+        fullteams2.push(team);
+      }
+    });
+    return fullteams2;
+  }
+
+  socket.on("teamslist firstshow", function(){
+    var teamdata = [];
+    var fullteamslist = fullteams();
+    console.log("Full teams:")
+    console.log(fullteamslist);
+    fullteamslist.forEach(function(team){
+      var teamstate = "";
+      if(team.users.length == 5){
+        if(team.game){
+          teamstate = "In Game";
+        }
+        else {
+          teamstate = "Ready";
+        }
+      }
+      else {
+        teamstate = "Not Full";
+      }
+      teamdata.push({
+        name: team.name,
+        state: teamstate
+      });
+    });
+    teams[users[socket.username].teamname].users.forEach(function(username){
+      users[username].socket.emit("teamslist fulldata", teamdata);
+    });
   });
 });
