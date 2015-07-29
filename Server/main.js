@@ -164,7 +164,7 @@ io.on('connection', function (socket) {
     var fullteamslist = fullteams();
     console.log("Full teams:")
     console.log(fullteamslist);
-    fullteamslist.forEach(function(team){
+    teams.forEach(function(team){
       var teamstate = "";
       if(team.users.length == 5){
         if(team.game){
