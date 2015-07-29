@@ -58,6 +58,7 @@ var numUsers = 0;
 //new stuff, in addition to chat parts above
 var users = {};
 var teams = {};
+var games = [];
 
 io.on('connection', function (socket) {
   socket.on("register", function(data){
@@ -212,6 +213,44 @@ io.on('connection', function (socket) {
     });
     teams[users[socket.username].teamname].users.forEach(function(username){
       users[username].socket.emit("teamslist fulldata", teamdata);
+    });
+  });
+
+  socket.on("teamslist click", function(otherteamname){
+    var gameid = games.length;
+    var userscores = {};
+    teams[users[socket.username].teamname].users.concat(teams[otherteamname]).forEach(function(username){
+      userscores[username] = 0;
+    });
+    games.push({
+      id: gameid,
+      team1: teams[users[socket.username].teamname],
+      team2: teams[otherteamname],
+      scores: {
+        [users[socket.username].teamname]: 0,
+        [otherteamname]: 0,
+      },
+      allusers: teams[users[socket.username].teamname].users.concat(teams[otherteamname]),
+      starttime: date.now(),
+      endtime: (date.now() + 120000)
+    });
+    games[gameid].allusers.forEach(function(username){
+      users[username].game = gameid
+    });
+  });
+
+  socket.on("objectcollected", function(data){
+    games[users[socket.username].gameid].allusers.forEach(function(username){
+      users[username].socket.emit("otheruserobjectcollected", data);
+    });
+    games[users[socket.username].gameid].userscores[socket.username] += 1;
+    games[users[socket.username].gameid].scores[users[socket.username].teamname] += 1;
+    socket.emit("scoreupdate user", games[users[socket.username].gameid].userscores[socket.username])
+    games[users[socket.username].gameid].team1.users.forEach(function(username){
+      users[username].socket.emit(games[users[socket.username].gameid].team1.score + "-" + games[users[socket.username].gameid].team2.score);
+    });
+    games[users[socket.username].gameid].team2.users.forEach(function(username){
+      users[username].socket.emit(games[users[socket.username].gameid].team2.score + "-" + games[users[socket.username].gameid].team1.score);
     });
   });
 });
