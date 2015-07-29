@@ -1,6 +1,7 @@
 var express = require('express');
 var fs = require("fs");
 var path = require('path');
+var data = JSON.parse(fs.readFileSync(path.join(__dirname,'../../Client/data/doc.geojson'), "utf8"));
 var router = express.Router();
 
 router.get("/api/test", function(req, res){
@@ -82,11 +83,27 @@ function getObjects(obj, key, val) {
     return objects;
 }
 
-// e.g. /api/object/36745/json
-router.get("/api/object/:id/json", function (req, res) {
-  var data = JSON.parse(fs.readFileSync(path.join(__dirname,'../../Client/data/doc.geojson'), "utf8"));
-  res.json(getObjects(data.features, "id",  req.params.id)[0]);
-});
+// Get Space Object function
+function getSpaceThing(id){
+  return getObjects(data.features, "id", id)[0];
+}
 
+// e.g. /api/object/36745/json
+router.get("/api/object/:id/:format", function (req, res) {
+  var spaceObject = getSpaceThing(req.params.id);
+  //console.log("Object", JSON.stringify(spaceObject))
+  switch(req.params.format){
+    case "html":
+      var description = spaceObject.properties.description;
+      // Strip out unwanted additon at end
+      res.send(description.substring(0, description.length - 80));
+      break;
+    case "json":
+      res.json(spaceObject);
+      break;
+    default:
+      res.json({error: true, message: "ERROR This requested format type is not supported. Try /api/object/:id/json or /api/object/:id/html"});
+  }
+});
 
 module.exports = router;
