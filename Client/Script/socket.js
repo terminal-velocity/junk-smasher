@@ -86,9 +86,9 @@ socket.on("joinedteam", function(){
     window.setInterval(() => {
         socket.emit("position-update-user", {
             position: [
-                app.camera.spherical.lat,
-                app.camera.spherical.lon,
-                app.camera.spherical.elev
+                app.camera.position.x,
+                app.camera.position.y,
+                app.camera.position.z
             ]
         });
     }, 100);
@@ -107,11 +107,11 @@ socket.on("position-update-others", function (data) {
     console.log(data);
 
     let userMesh = app.players[data.user];
-    userMesh.spherical = {
-        lat: data.position[0],
-        lon: data.position[1],
-        elev: data.position[2]
-    };
+    userMesh.position.set(
+        data.position[0],
+        data.position[1],
+        data.position[2]
+    );
 });
 
 socket.on("readytoselect", function(){
