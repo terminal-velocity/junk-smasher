@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-router.get("/test", function(req, res){
+router.get("/api/test", function(req, res){
 	res.send("Hello, test");
 });
 
-router.get("/new", function(req, res){
+router.get("/api/new", function(req, res){
   var saves = req.db.collection('saves');
   var save = {};
   if(!req.query.level){
