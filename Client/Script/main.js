@@ -17,7 +17,8 @@ $.get("/data/doc-min-1.geojson", (data) => {
     console.log("There are " + data.features.length);
     for (let i = 0; i < data.features.length; i++) {
         let point = data.features[i].geometry.coordinates;
-        point.active = data.features[i].properties.styleUrl === "#ActiveLEO";
+        point.active = data.features[i].properties.styleUrl
+            .toLowerCase().indexOf("active") !== -1;
         point.jid = data.features[i].id;
 
         if (
@@ -38,6 +39,10 @@ $.get("/data/doc-min-1.geojson", (data) => {
 
         let mesh = factories.junkFactory(point[0], point[1], point[2],
             point.active);
+        mesh.meta = {
+            active: point.active,
+            id: point.jid
+        };
         app.junkMeshes.push(mesh);
 
         app.scene.add(mesh);
