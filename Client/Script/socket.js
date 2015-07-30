@@ -65,6 +65,10 @@ $("#gamestart").click(window.startGame);
 //////// socket.io //////////////
 /////////////////////////////////
 
+socket.on("scoreupdate all", function (str) {
+    $("#scoreText").html(str);
+});
+
 socket.on("usernamecheckresponse", function(availability){
     if(availability !== "available"){
         $("#loginregisterbutton").html("Sign In");
