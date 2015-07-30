@@ -234,7 +234,7 @@ io.on('connection', function (socket) {
       starttime: Date.now(),
       endtime: (Date.now() + 120000),
       end: function(){
-        this.allusers.forEach(function(username){
+        games[gameid].allusers.forEach(function(username){
           users[username].socket.emit("gameover");
         });
       }
