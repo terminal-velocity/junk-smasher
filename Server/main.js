@@ -63,10 +63,14 @@ var games = [];
 io.on('connection', function (socket) {
   socket.on("register", function(data){
   	//eventually add auth here
+    if(data.password != ""){
+      
+    }
   	socket.username = data.username;
   	users[data.username] = {socket: socket};
     socket.emit("loggedin", data.username);
   });
+
   socket.on("checkusername", function(username){
     if(false){ //add auth check here
       socket.emit("usernamecheckresponse", "not available");

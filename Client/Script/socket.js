@@ -38,7 +38,8 @@ $("canvas#target").click(() => {
 
 $("#loginregisterbutton").click(function(){
     socket.emit("register", {
-        username: $("#username").val()
+        username: $("#username").val(),
+        password: $("#password").val()
     });
 });
 
