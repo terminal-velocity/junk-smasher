@@ -235,7 +235,8 @@ io.on('connection', function (socket) {
       endtime: (date.now() + 120000)
     });
     games[gameid].allusers.forEach(function(username){
-      users[username].game = gameid
+      users[username].game = gameid;
+      users[username].socket.emit("startgame");
     });
   });
 
@@ -243,14 +244,22 @@ io.on('connection', function (socket) {
     games[users[socket.username].gameid].allusers.forEach(function(username){
       users[username].socket.emit("otheruserobjectcollected", data);
     });
-    games[users[socket.username].gameid].userscores[socket.username] += 1;
-    games[users[socket.username].gameid].scores[users[socket.username].teamname] += 1;
+    var scorechange = 0;
+    if(data.active){
+      scorechange = -1;
+    }
+    else {
+      scorechange = 5;
+    }
+    games[users[socket.username].gameid].userscores[socket.username] += scorechange;
+    games[users[socket.username].gameid].scores[users[socket.username].teamname] += scorechange;
     socket.emit("scoreupdate user", games[users[socket.username].gameid].userscores[socket.username])
     games[users[socket.username].gameid].team1.users.forEach(function(username){
-      users[username].socket.emit(games[users[socket.username].gameid].team1.score + "-" + games[users[socket.username].gameid].team2.score);
+      users[username].socket.emit("scoreupdate all", games[users[socket.username].gameid].team1.score + "-" + games[users[socket.username].gameid].team2.score);
     });
     games[users[socket.username].gameid].team2.users.forEach(function(username){
-      users[username].socket.emit(games[users[socket.username].gameid].team2.score + "-" + games[users[socket.username].gameid].team1.score);
+      users[username].socket.emit("scoreupdate all", games[users[socket.username].gameid].team2.score + "-" + games[users[socket.username].gameid].team1.score);
+      users[username].socket.emit("startgame");
     });
   });
 });
