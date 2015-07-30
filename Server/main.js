@@ -234,7 +234,7 @@ io.on('connection', function (socket) {
       starttime: Date.now(),
       endtime: (Date.now() + 120000),
       end: function(){
-        
+
       }
     });
 
@@ -265,7 +265,6 @@ io.on('connection', function (socket) {
     });
     games[users[socket.username].gameid].team2.users.forEach(function(username){
       users[username].socket.emit("scoreupdate all", games[users[socket.username].gameid].team2.score + "-" + games[users[socket.username].gameid].team1.score);
-      users[username].socket.emit("startgame");
     });
   });
 });
