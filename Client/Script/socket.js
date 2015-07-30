@@ -150,6 +150,8 @@ $("#showteamslist").click(function(){
 socket.on("teamslist fulldata", function(teamsdata){
   teamsdata.forEach(function(teamdata){
     $("#teamslist>ul").html($("#teamslist>ul").html() + "<li id='teamlist-" + teamdata.name + "' data-teamname='" + teamdata.name + "'><span class='teamname'>" + teamdata.name + "</span><span class='teamstate'>" + teamdata.state + "</span></li>");
+  });
+  teamsdata.forEach(function(teamdata){
     $("#teamlist-" + teamdata.name).click(function(){
       socket.emit("teamslist click", $(this).data("teamname"));
     });
