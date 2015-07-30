@@ -235,6 +235,7 @@ io.on('connection', function (socket) {
       endtime: (Date.now() + 120000),
       end: function(){
         games[gameid].allusers.forEach(function(username){
+          console.log("told " + username + " that game is over")
           users[username].socket.emit("gameover");
         });
       }
@@ -250,7 +251,7 @@ io.on('connection', function (socket) {
   });
 
   socket.on("objectcollected", function(data){
-    games[users[socket.username].gameid].allusers.forEach(function(username){
+    games[users[socket.username].game].allusers.forEach(function(username){
       users[username].socket.emit("otheruserobjectcollected", data);
     });
     var scorechange = 0;
@@ -260,14 +261,14 @@ io.on('connection', function (socket) {
     else {
       scorechange = 5;
     }
-    games[users[socket.username].gameid].userscores[socket.username] += scorechange;
-    games[users[socket.username].gameid].scores[users[socket.username].teamname] += scorechange;
-    socket.emit("scoreupdate user", games[users[socket.username].gameid].userscores[socket.username])
-    games[users[socket.username].gameid].team1.users.forEach(function(username){
-      users[username].socket.emit("scoreupdate all", games[users[socket.username].gameid].team1.score + "-" + games[users[socket.username].gameid].team2.score);
+    games[users[socket.username].game].userscores[socket.username] += scorechange;
+    games[users[socket.username].game].scores[users[socket.username].teamname] += scorechange;
+    socket.emit("scoreupdate user", games[users[socket.username].game].userscores[socket.username])
+    games[users[socket.username].game].team1.users.forEach(function(username){
+      users[username].socket.emit("scoreupdate all", games[users[socket.username].game].team1.score + "-" + games[users[socket.username].game].team2.score);
     });
-    games[users[socket.username].gameid].team2.users.forEach(function(username){
-      users[username].socket.emit("scoreupdate all", games[users[socket.username].gameid].team2.score + "-" + games[users[socket.username].gameid].team1.score);
+    games[users[socket.username].game].team2.users.forEach(function(username){
+      users[username].socket.emit("scoreupdate all", games[users[socket.username].game].team2.score + "-" + games[users[socket.username].game].team1.score);
     });
   });
 });
