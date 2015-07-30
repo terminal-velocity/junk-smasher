@@ -230,10 +230,16 @@ io.on('connection', function (socket) {
         [users[socket.username].teamname]: 0,
         [otherteamname]: 0,
       },
-      allusers: teams[users[socket.username].teamname].users.concat(teams[otherteamname]),
-      starttime: date.now(),
-      endtime: (date.now() + 120000)
+      allusers: teams[users[socket.username].teamname].users.concat(teams[otherteamname].users),
+      starttime: Date.now(),
+      endtime: (Date.now() + 120000),
+      end: function(){
+        
+      }
     });
+
+    console.log("New Game Started");
+    console.log(games);
     games[gameid].allusers.forEach(function(username){
       users[username].game = gameid;
       users[username].socket.emit("startgame");
