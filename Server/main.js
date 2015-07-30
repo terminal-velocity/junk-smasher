@@ -234,8 +234,11 @@ io.on('connection', function (socket) {
       starttime: Date.now(),
       endtime: (Date.now() + 120000),
       end: function(){
-
-      }
+        this.allusers.forEach(function(username){
+          users[username].socket.emit("gameover");
+        });
+      };
+      setTimeout(games[gameid].end, 120000);
     });
 
     console.log("New Game Started");
