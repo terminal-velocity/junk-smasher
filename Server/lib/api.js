@@ -1,7 +1,7 @@
 exports.addUserScore = function(db, name, value){
   var scores = db.collection('user-scores');
   var score = {};
-  score.score = parseInt(value);}
+  score.score = parseInt(value);
   score.name = req.query.name;
   scores.insert(score, function(err, doc) {
     if(err){
