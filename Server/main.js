@@ -64,7 +64,7 @@ io.on('connection', function (socket) {
   socket.on("register", function(data){
   	//eventually add auth here
     if(data.password != ""){
-      
+
     }
   	socket.username = data.username;
   	users[data.username] = {socket: socket};
@@ -242,7 +242,8 @@ io.on('connection', function (socket) {
           console.log("told " + username + " that game is over")
           users[username].socket.emit("gameover");
         });
-      }
+      },
+      userscores: userscores
     });
     setTimeout(games[gameid].end, 120000);
 
