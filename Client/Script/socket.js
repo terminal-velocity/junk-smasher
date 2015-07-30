@@ -29,6 +29,8 @@ $("canvas#target").click(() => {
         if (vec.lengthSq() <= (15000 * 15000)) {
             app.scene.remove(mesh);
 
+            socket.emit("objectcollected", mesh.meta);
+
             console.log("removed object");
         }
     }
@@ -98,6 +100,19 @@ socket.on("teamcheckresponse", function(state){
     }
 });
 
+socket.on("otheruserobjectcollected", function (object) {
+    console.log("Received destruction.");
+
+    for (let mesh of app.junkMeshes) {
+        if (mesh.meta.id === object.id) {
+            console.log("Destriyed object " + object.id);
+
+            app.scene.remove(mesh);
+            return;
+        }
+    }
+});
+
 socket.on("joinedteam", function(){
     $("#teamselection").fadeOut(function(){
         $("#teammembers").fadeIn();
@@ -113,8 +128,8 @@ socket.on("newmember", function(newusername){
 });
 
 socket.on("position-update-others", function (data) {
-    console.log("position update:");
-    console.log(data);
+    //console.log("position update:");
+    //console.log(data);
 
     let userMesh = app.players[data.user];
     userMesh.position.set(
