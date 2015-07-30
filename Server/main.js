@@ -270,10 +270,10 @@ io.on('connection', function (socket) {
     games[users[socket.username].game].scores[users[socket.username].teamname] += scorechange;
     socket.emit("scoreupdate user", games[users[socket.username].game].userscores[socket.username])
     games[users[socket.username].game].team1.users.forEach(function(username){
-      users[username].socket.emit("scoreupdate all", games[users[socket.username].game].team1.score + "-" + games[users[socket.username].game].team2.score);
+      users[username].socket.emit("scoreupdate all", games[users[socket.username].game].scores[games[users[socket.username].game].team1.name] + "-" + games[users[socket.username].game].scores[games[users[socket.username].game].team2.name]);
     });
     games[users[socket.username].game].team2.users.forEach(function(username){
-      users[username].socket.emit("scoreupdate all", games[users[socket.username].game].team2.score + "-" + games[users[socket.username].game].team1.score);
+      users[username].socket.emit("scoreupdate all", games[users[socket.username].game].scores[games[users[socket.username].game].team2.name] + "-" + games[users[socket.username].game].scores[games[users[socket.username].game].team1.name]);
     });
   });
 });
