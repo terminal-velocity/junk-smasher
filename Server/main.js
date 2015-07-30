@@ -237,9 +237,9 @@ io.on('connection', function (socket) {
         this.allusers.forEach(function(username){
           users[username].socket.emit("gameover");
         });
-      };
-      setTimeout(games[gameid].end, 120000);
+      }
     });
+    setTimeout(games[gameid].end, 120000);
 
     console.log("New Game Started");
     console.log(games);
