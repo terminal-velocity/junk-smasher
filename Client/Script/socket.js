@@ -125,7 +125,7 @@ socket.on("joinedteam", function(){
 });
 
 socket.on("newmember", function(newusername){
-    $("#teammembers>ul").html($("#teammembers>ul").html() + "<li>" + newusername + "</li>");
+    $("#teammembers>ul").append("<li>" + newusername + "</li>");
     if (newusername === app.username) { return; }
 
     //console.log("Received new user data for " + newusername);
@@ -154,7 +154,7 @@ $("#showteamslist").click(function(){
 
 socket.on("teamslist fulldata", function(teamsdata){
   teamsdata.forEach(function(teamdata){
-    $("#teamslist>ul").html($("#teamslist>ul").html() + "<li id='teamlist-" + teamdata.name + "' data-teamname='" + teamdata.name + "'><span class='teamname'>" + teamdata.name + "</span><span class='teamstate'>" + teamdata.state + "</span></li>");
+    $("#teamslist>ul").append("<li id='teamlist-" + teamdata.name + "' data-teamname='" + teamdata.name + "'><span class='teamname'>" + teamdata.name + "</span><span class='teamstate'>" + teamdata.state + "</span></li>");
   });
   teamsdata.forEach(function(teamdata){
     $("#teamlist-" + teamdata.name).click(function(){
@@ -169,8 +169,11 @@ socket.on("teamslist fulldata", function(teamsdata){
     $("#teamlist-" + data.name + ">.teamstate").html(data.state);
   });
 
-  socket.on("teamslist newteam", function(data){
-    $("#teamslist>ul").html($("#teamslist>ul").html() + "<li id='teamlist-" + data.name + "'><span class='teamname'>" + data.name + "</span><span class='teamstate'>" + data.state + "</span></li>");
+  socket.on("teamslist newteam", function(teamdata){
+    $("#teamslist>ul").append("<li id='teamlist-" + teamdata.name + "' data-teamname='" + teamdata.name + "'><span class='teamname'>" + teamdata.name + "</span><span class='teamstate'>" + teamdata.state + "</span></li>");
+    $("#teamlist-" + teamdata.name).click(function(){
+      socket.emit("teamslist click", $(this).data("teamname"));
+    });
   });
 });
 

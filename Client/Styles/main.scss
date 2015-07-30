@@ -15,7 +15,7 @@ body {
 		color: white;
 		font-size: small;
 	}
-  
+
   /*#leaderboards {
 		z-index: 10;
 		position: absolute;
@@ -57,7 +57,7 @@ body {
 		  box-shadow: 0px 0px 30px lightgrey;
 		}
 
-		.startwindow input[type="text"]{
+		.startwindow input[type="text"], .startwindow input[type="password"]{
 		  width: 80%;
 		  margin-left: auto;
 		  margin-right: auto;
