@@ -25,7 +25,7 @@ function skyboxFactory(base, extension, size) {
 }
 
 let matIA = new THREE.MeshBasicMaterial({
-    color: 0xff0000
+    color: 0x9933ff
 });
 let matA  = new THREE.MeshBasicMaterial({
     color: 0x00ff00
