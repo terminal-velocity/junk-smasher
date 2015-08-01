@@ -6,6 +6,18 @@ Cosmic Junk Collector is a browser game in which you and teammates compete again
 
 Space junk, also known as space debris, is any form of rubbish in orbit around the earth. Most of it is disused satellites, or spent rocket pieces. Every year, more space junk ends up there, and it's a problem, because any contact with orbiting material is devastating for rockets or space stations.
 
+## Libraries used
+
+* Project developed in Node.JS
+* Express.JS (used for web routing + compression)
+* UglifyJS (for minification)
+* Gulp
+* Browserify
+* Socket.io (realtime server-client communication, mainly used for position data)
+* Three.JS (used for client side 3D rendering)
+* Jquery (for DOM manipulation)
+* MongoJS (for updating DB, used for authentication + leaderboard data)
+
 ## How to install
 
 Install Node.js (with NPM). Have a MongoDB instance available somewhere. Clone the repo and change directory into it. Then:
