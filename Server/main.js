@@ -134,7 +134,14 @@ io.on('connection', function (socket) {
       });
     }
     else {
-      register(data.username, socket);
+      authuserexists(data.username, function(userexists){
+        if(!userexists){
+          register(data.username, socket);
+        }
+        else {
+          socket.emit("incorrectpasswd");
+        }
+      });
     }
   });
 
