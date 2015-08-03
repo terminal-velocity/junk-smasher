@@ -362,7 +362,7 @@ io.on('connection', function (socket) {
       if(users[socket.username].team){
         teams[users[socket.username].team].splice(users[socker.username].team.indexOf(socket.username), 1);
       }
-      if(users[socket.username].game){
+      if(users[socket.username].game > -1){
         games[users[socket.username].game].allusers.splice(games[users[socket.username].game].allusers.indexOf(socket.username), 1);
       }
       delete users[socket.username];
