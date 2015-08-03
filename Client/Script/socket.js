@@ -70,14 +70,26 @@ socket.on("scoreupdate all", function (str) {
 });
 
 socket.on("usernamecheckresponse", function(availability){
-    if(availability !== "available"){
-        $("#loginregisterbutton").html("Sign In");
-        $("#login #password").attr("placeholder", "Password");
-    }
-    else {
-        $("#loginregisterbutton").html("Go");
+    if(availability == "available"){
+        $("#loginregisterbutton").show();
+        $("#loginunavailable").hide();
+        $("#loginregisterbutton").html("Go!");
         $("#login #password").attr("placeholder", "Password (optional)");
     }
+    else if(availability == "needs password"){
+      $("#loginregisterbutton").show();
+      $("#loginunavailable").hide();
+      $("#loginregisterbutton").html("Sign In");
+      $("#login #password").attr("placeholder", "Password");
+    }
+    else {
+        $("#loginregisterbutton").hide();
+        $("#loginunavailable").show();
+    }
+});
+
+socket.on("incorrectpasswd", function(){
+  alert("Sorry, that password was incorrect. Please try again.");
 });
 
 socket.on("loggedin", function(usernamefromserver) {

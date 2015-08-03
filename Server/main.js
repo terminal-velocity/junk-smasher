@@ -6,7 +6,8 @@ var express = require("express"),
     methodOverride = require("method-override"),
     session = require("express-session"),
     mongojs = require("mongojs"),
-    compression = require('compression');
+    compression = require('compression'),
+    md5 = require("md5");
 
 const MongoStore = require("connect-mongo")(session);
 
@@ -34,6 +35,8 @@ app.use((req, res, next) => {
     next();
 });
 
+var mongo = mongojs(config.db);
+
 app.get("/dynamic", (req, res) => {
 	res.send("Hello, world");
 });
@@ -60,22 +63,97 @@ var users = {};
 var teams = {};
 var games = [];
 
+function authuserexists(username, callback){
+  var userpasswds = mongo.collection("user-authdata");
+  userpasswds.find({username: username}, function(err, docs){
+    if(err){
+      console.log(err);
+    }
+    else{
+      if(docs.length != 0){
+        callback(true);
+      }
+      else{
+        callback(false);
+      }
+    }
+  });
+}
+
+function authcheckpasswd(username, password, callback){
+  var userpasswds = mongo.collection("user-authdata");
+  userpasswds.find({username: username, password: md5(password + username)}, function(err, docs){
+    if(err){
+      console.log(err);
+    }
+    else{
+      if(docs.length != 0){
+        callback(true);
+      }
+      else{
+        callback(false);
+      }
+    }
+  });
+}
+
+function authcreateuser(username, password){
+  var userpasswds = mongo.collection("user-authdata");
+  var user =  {username: username, password: md5(password + username)}
+  userpasswds.insert(user);
+}
+
+function register(username, socket){
+  socket.username = username;
+  users[username] = {socket: socket};
+  socket.emit("loggedin", username);
+}
+
 io.on('connection', function (socket) {
   socket.on("register", function(data){
-  	//eventually add auth here
-    if(data.password != ""){
-
+    if(data.username in users){
+      socket.emit("usernametaken");
     }
-  	socket.username = data.username;
-  	users[data.username] = {socket: socket};
-    socket.emit("loggedin", data.username);
+    else if(data.password != ""){
+      authuserexists(data.username, function(userexists){
+        if(userexists){
+          authcheckpasswd(data.username, data.password, function(passwdcorrect){
+            if(passwdcorrect){
+              register(data.username, socket);
+            }
+            else {
+              socket.emit("incorrectpasswd");
+            }
+          });
+        }
+        else
+        {
+          authcreateuser(data.username, data.password);
+          register(data.username, socket);
+        }
+      });
+    }
+    else {
+      register(data.username, socket);
+    }
   });
 
   socket.on("checkusername", function(username){
-    if(false){ //add auth check here
-      socket.emit("usernamecheckresponse", "not available");
+    if(username in users){
+      socket.emit("usernamecheckresponse", "taken");
+    }
+    else {
+      authuserexists(username, function(userexists){
+        if(userexists){
+          socket.emit("usernamecheckresponse", "needs password");
+        }
+        else {
+          socket.emit("usernamecheckresponse", "available");
+        }
+      });
     }
   });
+
   socket.on("checkteamname", function(teamname){
     console.log(teamname);
     console.log(teams);
@@ -92,6 +170,7 @@ io.on('connection', function (socket) {
       socket.emit("teamcheckresponse", "new");
     }
   });
+
   socket.on("jointeam", function(teamname){
     if(!(teamname in teams)){
       teams[teamname] = {
@@ -241,6 +320,7 @@ io.on('connection', function (socket) {
         games[gameid].allusers.forEach(function(username){
           console.log("told " + username + " that game is over")
           users[username].socket.emit("gameover");
+          users[username].game = -1;
         });
       },
       userscores: userscores
@@ -275,5 +355,17 @@ io.on('connection', function (socket) {
     games[users[socket.username].game].team2.users.forEach(function(username){
       users[username].socket.emit("scoreupdate all", games[users[socket.username].game].scores[games[users[socket.username].game].team2.name] + "-" + games[users[socket.username].game].scores[games[users[socket.username].game].team1.name]);
     });
+  });
+
+  socket.on("disconnect", function(){
+    if(socket.username){
+      if(users[socket.username].team){
+        teams[users[socket.username].team].splice(users[socker.username].team.indexOf(socket.username), 1);
+      }
+      if(users[socket.username].game){
+        games[users[socket.username].game].allusers.splice(games[users[socket.username].game].allusers.indexOf(socket.username), 1);
+      }
+      delete users[socket.username];
+    }
   });
 });
