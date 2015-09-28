@@ -39,7 +39,6 @@ Then run:
 nf run npm start
 ```
 
-
 https://docs.google.com/presentation/d/1NXdO59YCm2fi478ZhVOWfD6-Db5Wo0w5IAcwWDRq328/edit?usp=sharing
 
 ## Links
